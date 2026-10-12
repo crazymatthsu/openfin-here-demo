@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Interop & FDC3 trading blotter demo</title>
+    <link rel="stylesheet" href="/src/shared/styles.css" />
+    <style>
+      main { padding: 16px 24px; gap: 16px; max-width: 960px; }
+      section { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; }
+      h2 { font-size: 14px; margin: 0 0 8px; }
+      code, pre { font-family: var(--mono); font-size: 12px; }
+      pre { background: var(--bg); padding: 8px 10px; border-radius: 6px; overflow: auto; }
+      ul { margin: 6px 0; padding-left: 20px; }
+    </style>
+  </head>
+  <body>
+    <header class="panel-header"><h1>Here Core demo 01 · Interop API + FDC3 trading blotter</h1><span class="badge" id="env">…</span></header>
+    <main>
+      <section>
+        <h2>Launch inside Here Core / OpenFin (the real demo)</h2>
+        <p>Start Deephaven (see <code>deephaven/README.md</code>), keep this dev server running, then from <code>demos/01-interop-fdc3-blotter</code>:</p>
+        <pre>npm run launch        # = npx openfin --launch --config http://localhost:5173/manifest.fin.json</pre>
+        <p>Or, if the Here Core / OpenFin RVM is installed, open <a href="fins://localhost:5173/manifest.fin.json">fins://localhost:5173/manifest.fin.json</a>.</p>
+      </section>
+      <section>
+        <h2>Browser mode (no OpenFin runtime, reduced fidelity)</h2>
+        <p>Open each panel in its own tab. They share context through a BroadcastChannel-based FDC3 shim.</p>
+        <ul>
+          <li><a href="/blotter/" target="_blank">Order Blotter</a> — type a symbol and press Enter</li>
+          <li><a href="/monitor/" target="_blank">Interop Monitor</a> — shows every context received</li>
+          <li><a href="/bridge/" target="_blank">Deephaven Bridge</a> — writes the symbol into Deephaven (needs Deephaven on <code>localhost:10000</code>; add <code>?server=http://host:port</code> to change)</li>
+          <li><a href="http://localhost:10000/iframe/widget/?name=quotes_filtered" target="_blank">Deephaven quotes_filtered</a>,
+              <a href="http://localhost:10000/iframe/widget/?name=trades_filtered" target="_blank">trades_filtered</a>,
+              <a href="http://localhost:10000/iframe/widget/?name=positions_filtered" target="_blank">positions_filtered</a>,
+              <a href="http://localhost:10000/iframe/widget/?name=price_chart" target="_blank">price_chart</a>,
+              <a href="http://localhost:10000/ide/" target="_blank">Deephaven IDE</a></li>
+        </ul>
+      </section>
+      <section>
+        <h2>Pages served by this dev server</h2>
+        <ul>
+          <li><code>/manifest.fin.json</code> — platform manifest (runtime, provider, layout snapshot)</li>
+          <li><code>/platform/provider.html</code> — platform provider, creates the Interop Broker</li>
+          <li><code>/blotter/</code>, <code>/monitor/</code>, <code>/bridge/</code> — the panels</li>
+          <li><code>/preload/deephaven-bridge.js</code> — preload script injected into the Deephaven view</li>
+        </ul>
+      </section>
+    </main>
+    <script type="module">
+      const badge = document.getElementById('env');
+      const inOpenFin = typeof fin !== 'undefined';
+      badge.textContent = inOpenFin ? 'running inside Here Core' : 'plain browser';
+      badge.className = inOpenFin ? 'badge badge-ok' : 'badge badge-warn';
+    </script>
+  </body>
+</html>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Order Blotter</title>
+    <link rel="stylesheet" href="/src/shared/styles.css" />
+  </head>
+  <body>
+    <header class="panel-header" id="header">
+      <h1>Order Blotter</h1>
+      <span class="badge" id="api-badge">starting…</span>
+      <span class="spacer"></span>
+      <div id="channel-picker" aria-label="User channel"></div>
+    </header>
+    <main>
+      <div class="toolbar">
+        <label for="symbol">Symbol</label>
+        <input id="symbol" list="symbols" placeholder="e.g. AAPL" autocomplete="off" size="10" />
+        <datalist id="symbols"></datalist>
+        <button id="broadcast" class="primary" type="button">Broadcast</button>
+        <button id="clear" type="button">Clear filter</button>
+        <span class="current" id="current" title="Current instrument">—</span>
+        <span class="hint" id="current-name"></span>
+      </div>
+      <form class="toolbar" id="ticket" autocomplete="off">
+        <label>New order</label>
+        <select id="t-side"><option>BUY</option><option>SELL</option></select>
+        <input id="t-qty" type="number" min="100" step="100" value="500" size="6" />
+        <span class="hint">@</span>
+        <input id="t-price" type="number" min="0" step="0.01" placeholder="limit" size="8" />
+        <button type="submit">Add order</button>
+      </form>
+      <div class="table-wrap">
+        <table class="grid" id="orders">
+          <thead>
+            <tr><th>Time</th><th>Symbol</th><th>Side</th><th class="num">Qty</th><th class="num">Filled</th><th class="num">Limit</th><th>Status</th><th>Trader</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </main>
+    <footer class="statusbar"><span id="runtime"></span><span id="counts"></span></footer>
+    <script type="module" src="/src/blotter/main.ts"></script>
+  </body>
+</html>
