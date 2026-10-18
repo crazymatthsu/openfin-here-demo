@@ -1,0 +1,20 @@
+{
+  "name": "openfin-here-demo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Small, focused demos of Here Core (formerly OpenFin Container) features. Each demo is an independent subproject under demos/.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.19"
+  },
+  "workspaces": [
+    "demos/*"
+  ],
+  "scripts": {
+    "demo:01": "npm run dev --workspace demos/01-interop-fdc3-blotter",
+    "demo:01:launch": "npm run launch --workspace demos/01-interop-fdc3-blotter",
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present"
+  }
+}

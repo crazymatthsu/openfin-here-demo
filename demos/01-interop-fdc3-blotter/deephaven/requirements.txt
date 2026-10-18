@@ -1,0 +1,4 @@
+# Deephaven Community Core embedded server (needs Java 17+ on PATH or JAVA_HOME).
+deephaven-server>=42.6
+# Optional: enables the deephaven.ui dashboard defined in app.d/fdc3_blotter.py
+deephaven-plugin-ui>=0.42

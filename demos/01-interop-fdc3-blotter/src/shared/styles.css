@@ -1,0 +1,83 @@
+:root {
+  color-scheme: dark;
+  --bg: #121417;
+  --panel: #1a1d22;
+  --panel-2: #22262d;
+  --border: #2d323b;
+  --text: #e6e8eb;
+  --muted: #9aa3ad;
+  --accent: #3b82f6;
+  --buy: #22c55e;
+  --sell: #ef4444;
+  --channel: #00cc88;
+  --font: 'Segoe UI', system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, 'Cascadia Mono', 'SF Mono', Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font: 13px/1.4 var(--font); }
+body { display: flex; flex-direction: column; }
+a { color: var(--accent); }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; background: var(--panel-2); border: 1px solid var(--border); border-radius: 4px; padding: 4px 10px; }
+button:hover { border-color: var(--accent); }
+button.primary { background: var(--accent); border-color: var(--accent); color: white; }
+input, select { background: var(--panel-2); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; }
+input:focus, select:focus { outline: 1px solid var(--accent); }
+
+header.panel-header {
+  display: flex; align-items: center; gap: 12px; padding: 8px 12px;
+  background: var(--panel); border-bottom: 3px solid var(--channel);
+}
+header.panel-header h1 { font-size: 14px; margin: 0; font-weight: 600; letter-spacing: .02em; }
+header.panel-header .spacer { flex: 1; }
+
+.badge { font-size: 11px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); white-space: nowrap; }
+.badge-ok { color: #a7f3d0; border-color: #047857; background: #052e1f; }
+.badge-warn { color: #fde68a; border-color: #b45309; background: #2a1d05; }
+.badge-muted { color: var(--muted); }
+
+.channel-picker { display: flex; gap: 6px; align-items: center; }
+.channel-dot {
+  width: 16px; height: 16px; padding: 0; border-radius: 50%; border: 2px solid transparent;
+  background: var(--dot); opacity: .45;
+}
+.channel-dot[aria-pressed="true"] { opacity: 1; border-color: white; box-shadow: 0 0 0 2px var(--dot); }
+.channel-dot:hover { opacity: .9; }
+
+main { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.toolbar { display: flex; gap: 8px; align-items: center; padding: 8px 12px; background: var(--panel); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+.toolbar label { color: var(--muted); font-size: 12px; }
+.toolbar .current { font-family: var(--mono); font-weight: 700; color: var(--channel); font-size: 16px; min-width: 64px; }
+
+.table-wrap { flex: 1; overflow: auto; min-height: 0; }
+table.grid { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 12px; }
+table.grid th { position: sticky; top: 0; background: var(--panel-2); text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); font-weight: 600; color: var(--muted); }
+table.grid td { padding: 4px 8px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+table.grid tr:hover td { background: var(--panel-2); }
+table.grid tr.selected td { background: #1e3a5f; }
+table.grid td.num { text-align: right; }
+.side-BUY { color: var(--buy); font-weight: 600; }
+.side-SELL { color: var(--sell); font-weight: 600; }
+.status-Filled { color: var(--buy); }
+.status-Working { color: #fbbf24; }
+.status-Cancelled { color: var(--muted); }
+
+footer.statusbar { padding: 4px 12px; background: var(--panel); border-top: 1px solid var(--border); color: var(--muted); font-size: 11px; display: flex; gap: 16px; }
+
+.log { font-family: var(--mono); font-size: 12px; overflow: auto; flex: 1; padding: 4px 0; }
+.log-row { display: flex; gap: 8px; align-items: baseline; padding: 3px 12px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+.log-time { color: var(--muted); }
+.log-dir { width: 12px; }
+.log-in .log-dir { color: var(--buy); }
+.log-out .log-dir { color: var(--accent); }
+.log-symbol { margin-left: auto; font-weight: 700; color: var(--channel); }
+.log-json { flex-basis: 100%; }
+.log-json summary { color: var(--muted); cursor: pointer; font-size: 11px; }
+.log-json pre { margin: 4px 0 0; padding: 6px; background: var(--bg); border-radius: 4px; overflow: auto; }
+
+.kv { display: grid; grid-template-columns: max-content 1fr; gap: 2px 12px; padding: 8px 12px; font-size: 12px; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; font-family: var(--mono); }
+
+.hint { color: var(--muted); font-size: 12px; padding: 8px 12px; }

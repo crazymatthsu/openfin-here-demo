@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Platform Provider</title>
+    <link rel="stylesheet" href="/src/shared/styles.css" />
+  </head>
+  <body>
+    <header class="panel-header"><h1>Platform provider</h1><span class="badge" id="status">initialising…</span></header>
+    <main>
+      <p class="hint">
+        This hidden window owns the platform: it calls <code>fin.Platform.init()</code>, which creates the
+        Interop Broker that every view's <code>window.fdc3</code> and <code>fin.me.interop</code> talk to.
+        The broker is subclassed to log every context that passes through it.
+      </p>
+      <div class="log" id="log"></div>
+    </main>
+    <script type="module" src="/src/platform/provider.ts"></script>
+  </body>
+</html>

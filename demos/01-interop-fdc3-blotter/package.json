@@ -1,0 +1,25 @@
+{
+  "name": "@openfin-here-demo/interop-fdc3-blotter",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Here Core (OpenFin) Interop API + FDC3 demo: an equities order blotter that drives embedded Deephaven panels by broadcasting fdc3.instrument context.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "launch": "openfin --launch --config http://localhost:5173/manifest.fin.json"
+  },
+  "devDependencies": {
+    "@finos/fdc3": "^2.2.3",
+    "@openfin/core": "^45.102.4",
+    "@playwright/test": "^1.56.1",
+    "openfin-cli": "^4.0.0",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.3"
+  }
+}

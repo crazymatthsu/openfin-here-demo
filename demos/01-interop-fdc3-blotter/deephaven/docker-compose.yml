@@ -1,0 +1,20 @@
+# Deephaven Community Core with the demo script pre-loaded via application mode.
+#
+#   cd demos/01-interop-fdc3-blotter/deephaven
+#   docker compose up
+#
+# Then open http://localhost:10000/ide/ to verify the tables exist.
+services:
+  deephaven:
+    # server-ui = Python server + deephaven.ui + plotly plugins (the plain
+    # ghcr.io/deephaven/server image also works; the ui dashboard is optional).
+    image: ghcr.io/deephaven/server-ui:latest
+    ports:
+      - "10000:10000"
+    volumes:
+      - ./app.d:/app.d:ro
+      - ./data:/data
+    environment:
+      # Application mode loads /app.d/*.app at start-up.
+      # Anonymous auth lets the OpenFin preload script and the embedded widgets connect without a token.
+      - START_OPTS=-Xmx4g -Ddeephaven.application.dir=/app.d -DAuthHandlers=io.deephaven.auth.AnonymousAuthenticationHandler
