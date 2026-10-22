@@ -4,29 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Interop Monitor</title>
-    <link rel="stylesheet" href="/src/shared/styles.css" />
   </head>
   <body>
-    <header class="panel-header" id="header">
-      <h1>Interop Monitor</h1>
-      <span class="badge" id="api-badge">starting…</span>
-      <span class="spacer"></span>
-      <div id="channel-picker" aria-label="User channel"></div>
-    </header>
-    <main>
-      <div class="toolbar" id="quick">
-        <label>Quick broadcast</label>
-      </div>
-      <dl class="kv">
-        <dt>Runtime</dt><dd id="runtime">…</dd>
-        <dt>API in use</dt><dd id="api">…</dd>
-        <dt>Channel</dt><dd id="channel">…</dd>
-        <dt>Contexts seen</dt><dd id="count">0</dd>
-      </dl>
-      <div class="toolbar"><label>Context log (newest first)</label><span class="spacer"></span><button id="clear" type="button">Clear</button></div>
-      <div class="log" id="log"></div>
-    </main>
-    <footer class="statusbar"><span>Listens to every context type on the joined channel.</span></footer>
-    <script type="module" src="/src/monitor/main.ts"></script>
+    <script type="module" src="/src/monitor.ts"></script>
   </body>
 </html>

@@ -8,19 +8,20 @@ machine with Here Core, see the last section.
 ## Step 0 — Repository skeleton (done)
 
 - Root `package.json` with npm workspaces (`demos/*`), `.gitignore`, `.editorconfig`, `demos/README.md` catalog, `docs/` folder.
+- *Later, for demo 02:* the panels, the preload script and the Deephaven folder moved to `shared/trading-panels` and `shared/deephaven` so both demos use one copy. Paths below reflect the current layout.
 - Verified: `npm install` at the root installs the demo workspace; `npm run build`/`test`/`typecheck` fan out.
 
 ## Step 1 — Deephaven data model (done)
 
 Goal: a server with ticking tables and a single *switch* a client can flip.
 
-- `deephaven/app.d/fdc3_blotter.py`
+- `shared/deephaven/app.d/fdc3_blotter.py`
   - `quotes` (every 500 ms), `trades` (every 1 s), `positions` (aggregated), `instruments` (static).
   - `symbol_filter`: keyed input table `{Slot, Symbol}` seeded with `AAPL`.
   - `*_filtered` tables and `price_chart` derived with `where_in(symbol_filter, "Symbol")`.
   - Optional `blotter_dashboard` (deephaven.ui) when the plugin is installed.
-- `deephaven/app.d/fdc3_blotter.app` (application-mode descriptor for Docker).
-- `deephaven/run_server.py` (embedded server for pip), `requirements.txt`, `start.sh`, `start.ps1`, `docker-compose.yml`.
+- `shared/deephaven/app.d/fdc3_blotter.app` (application-mode descriptor for Docker).
+- `shared/deephaven/run_server.py` (embedded server for pip), `requirements.txt`, `start.sh`, `start.ps1`, `docker-compose.yml`.
 - Verified: started with `run_server.py` (deephaven-server 42.6, Java 21); the script loads without error; `/iframe/widget/?name=quotes_filtered`, `price_chart`, `positions_filtered`, `symbol_filter` and `blotter_dashboard` all render (screenshots in `images/`).
 
 ## Step 2 — Platform manifest and provider (done)
@@ -35,7 +36,7 @@ Goal: a Here Core platform whose window shows six views and whose provider owns 
 
 Goal: the FDC3 publisher.
 
-- `blotter/index.html`, `src/blotter/main.ts`, `src/blotter/orders.ts`.
+- `shared/trading-panels/src/blotter/mount.ts` and `orders.ts`; the demo's `blotter/index.html` + `src/blotter.ts` mount it.
 - Symbol input with datalist, Enter/Broadcast → `fdc3.broadcast(fdc3.instrument)`; own order grid filters to the symbol; row click re-broadcasts; order ticket adds working orders; a timer fills them so the grid looks alive; colour-channel picker; follows inbound instrument contexts.
 - Verified: Playwright test "blotter broadcast reaches the monitor and filters the blotter".
 
@@ -43,24 +44,24 @@ Goal: the FDC3 publisher.
 
 Goal: the Interop-API subscriber and a visible trace.
 
-- `monitor/index.html`, `src/monitor/main.ts`; uses `fin.me.interop` inside Here Core, the shim elsewhere; logs every context with its JSON; quick-broadcast buttons; channel picker.
+- `shared/trading-panels/src/monitor/mount.ts` (entry `monitor/index.html` + `src/monitor.ts`); uses `fin.me.interop` inside Here Core, the shim elsewhere; logs every context with its JSON; quick-broadcast buttons; channel picker.
 - Verified: Playwright tests "monitor quick-broadcast drives the blotter" and "colour channels isolate context".
 
 ## Step 5 — Deephaven bridge (done)
 
 Goal: turn an FDC3 context into a Deephaven input-table write, from inside the Deephaven page.
 
-- `public/preload/deephaven-bridge.js` (classic script): transport auto-detection (Interop API → `window.fdc3`), Deephaven JS API connection, variable lookup through `subscribeToFieldUpdates`, serialised `addRow` writes, viewport subscription for the round-trip badge, `window.__dhFdc3Bridge` debug surface.
+- `shared/trading-panels/preload/deephaven-bridge.js` (classic script, published at `/preload/deephaven-bridge.js` by the package's Vite plugin): transport auto-detection (Interop API → `window.fdc3`), Deephaven JS API connection, variable lookup through `subscribeToFieldUpdates`, serialised `addRow` writes, viewport subscription for the round-trip badge, `window.__dhFdc3Bridge` debug surface.
 - Verified three ways:
   1. Injected into the real Deephaven embed page with Playwright's `addInitScript` (the same "run before page scripts" mechanism as a preload). It connected, resolved `symbol_filter`, and `setSymbol('JPM')` was reflected by the server (`images/deephaven-preload-overlay.png`).
-  2. Hosted by `bridge/index.html` in browser mode: the Playwright live test broadcasts from the blotter and then reads `quotes_filtered` through the JS API, asserting it contains only the broadcast symbol.
+  2. Hosted by the bridge page (`shared/trading-panels/src/bridge/mount.ts`) in browser mode: the Playwright live test broadcasts from the blotter and then reads `quotes_filtered` through the JS API, asserting it contains only the broadcast symbol.
   3. Deephaven's CORS headers were checked (`Access-Control-Allow-Origin` echoes the origin) so browser mode works cross-origin.
 
 ## Step 6 — Browser mode and automated tests (done)
 
-- `src/shared/fdc3-shim.ts`: minimal FDC3 2.0 Desktop Agent over `BroadcastChannel` (user channels, broadcast, listeners, late-join replay).
-- `src/shared/fdc3.ts`: waits for the real `window.fdc3` / `fdc3Ready`, falls back to the shim.
-- Unit tests (`tests/unit`, Vitest): instrument helpers and the shim. 15 tests.
+- `shared/trading-panels/src/shared/fdc3-shim.ts`: minimal FDC3 2.0 Desktop Agent over `BroadcastChannel` (user channels, broadcast, listeners, late-join replay).
+- `shared/trading-panels/src/shared/fdc3.ts`: waits for the real `window.fdc3` / `fdc3Ready`, falls back to the shim.
+- Unit tests (`shared/trading-panels/tests/unit`, Vitest): instrument helpers and the shim. 15 tests.
 - E2E tests (`tests/e2e`, Playwright): three browser-mode scenarios plus the live Deephaven round trip (enabled with `DEEPHAVEN_URL`). 4 tests.
 - `npm run typecheck`, `npm run build` (Vite, five HTML entry points) pass.
 

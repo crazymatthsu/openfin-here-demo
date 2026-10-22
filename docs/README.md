@@ -10,6 +10,9 @@ run it on macOS and Windows.
 | [01 · Interop API + FDC3 trading blotter — technical details](./01-interop-fdc3-blotter/01-technical-details.md) | Here Core platform, Interop Broker, FDC3 vs Interop API, preload scripts, Deephaven input tables and `where_in`, the full message flow. |
 | [01 · Implementation plan](./01-interop-fdc3-blotter/02-implementation-plan.md) | The step-by-step plan, what each step produced, how it was verified, what is still open. |
 | [01 · Running on macOS and Windows](./01-interop-fdc3-blotter/03-running-on-macos-and-windows.md) | Prerequisites, start-up commands, OS-specific notes, troubleshooting. |
+| [02 · Two windows on two screens — technical details](./02-multi-window-multi-monitor/01-technical-details.md) | Why one platform keeps two windows in sync, `fin.System.getMonitorInfo()`, the `createWindow` placement override, the Desk Controller, snapshots, desk-wide channels. |
+| [02 · Implementation plan](./02-multi-window-multi-monitor/02-implementation-plan.md) | The shared-package refactor, the steps, what was verified, what is manual. |
+| [02 · Running on macOS and Windows](./02-multi-window-multi-monitor/03-running-on-macos-and-windows.md) | Display arrangement on each OS, launch, what to try, troubleshooting. |
 
 Vocabulary used throughout:
 
