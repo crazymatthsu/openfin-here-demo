@@ -4,33 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Deephaven Bridge</title>
-    <link rel="stylesheet" href="/src/shared/styles.css" />
-    <style>
-      iframe { flex: 1; border: 0; background: #1b1b1f; min-height: 0; }
-    </style>
   </head>
   <body>
-    <header class="panel-header" id="header">
-      <h1>Deephaven FDC3 Bridge (browser mode)</h1>
-      <span class="badge" id="status-badge">starting…</span>
-      <span class="spacer"></span>
-      <span class="hint" id="server"></span>
-    </header>
-    <main>
-      <dl class="kv">
-        <dt>Transport</dt><dd id="transport">…</dd>
-        <dt>Last context</dt><dd id="last">—</dd>
-        <dt>Server-side filter</dt><dd id="server-filter">—</dd>
-        <dt>Writes</dt><dd id="writes">0</dd>
-        <dt>Error</dt><dd id="error">—</dd>
-      </dl>
-      <p class="hint">
-        This page hosts the same <code>preload/deephaven-bridge.js</code> that OpenFin injects into the
-        Deephaven view. Below is Deephaven's own embed of the <code>symbol_filter</code> input table, so you can
-        watch the server-side filter row change when the blotter broadcasts.
-      </p>
-      <iframe id="dh" title="Deephaven symbol_filter"></iframe>
-    </main>
-    <script type="module" src="/src/bridge/main.ts"></script>
+    <script type="module" src="/src/bridge.ts"></script>
   </body>
 </html>

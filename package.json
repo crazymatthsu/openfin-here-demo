@@ -8,6 +8,7 @@
     "node": ">=20.19"
   },
   "workspaces": [
+    "shared/trading-panels",
     "demos/*"
   ],
   "scripts": {
@@ -15,6 +16,9 @@
     "demo:01:launch": "npm run launch --workspace demos/01-interop-fdc3-blotter",
     "build": "npm run build --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
-    "test": "npm run test --workspaces --if-present"
+    "test": "npm run test --workspaces --if-present",
+    "demo:02": "npm run dev --workspace demos/02-multi-window-multi-monitor",
+    "demo:02:launch": "npm run launch --workspace demos/02-multi-window-multi-monitor",
+    "deephaven": "cd shared/deephaven && docker compose up"
   }
 }

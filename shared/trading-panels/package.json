@@ -1,0 +1,28 @@
+{
+  "name": "@openfin-here-demo/trading-panels",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Panels shared by the Here Core demos: order blotter (FDC3 publisher), interop monitor (Interop API subscriber), Deephaven FDC3 bridge (preload script) and the browser-mode FDC3 shim.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./blotter": "./src/blotter/mount.ts",
+    "./monitor": "./src/monitor/mount.ts",
+    "./bridge": "./src/bridge/mount.ts",
+    "./shared/*": "./src/shared/*.ts",
+    "./styles.css": "./src/styles.css",
+    "./preload/deephaven-bridge.js": "./preload/deephaven-bridge.js",
+    "./vite": "./vite-plugin.mjs"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@finos/fdc3": "^2.2.3",
+    "@openfin/core": "^45.102.4",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.3"
+  }
+}

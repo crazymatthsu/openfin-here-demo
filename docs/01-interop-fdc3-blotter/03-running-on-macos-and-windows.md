@@ -13,7 +13,7 @@ Everything below assumes you cloned the repository and are in its root.
 | Requirement | macOS | Windows | Notes |
 |-------------|-------|---------|-------|
 | Node.js 22 LTS (≥ 20.19) | `brew install node@22` or nodejs.org installer | nodejs.org installer or `winget install OpenJS.NodeJS.LTS` | Vite 8 needs a recent Node. |
-| Deephaven, **either** Docker Desktop | docker.com | docker.com (WSL 2 backend) | Simplest; uses `deephaven/docker-compose.yml`. |
+| Deephaven, **either** Docker Desktop | docker.com | docker.com (WSL 2 backend) | Simplest; uses `shared/deephaven/docker-compose.yml`. |
 | **or** Python 3.10–3.13 + Java 17+ | `brew install python@3.12 temurin@21` | `winget install Python.Python.3.12 EclipseAdoptium.Temurin.21.JDK` | `pip install deephaven-server` path; needs `java` on `PATH` or `JAVA_HOME`. |
 | Here Core / OpenFin runtime | downloaded automatically by `openfin-cli` on first launch | downloaded automatically by the OpenFin RVM on first launch | Needs outbound HTTPS to `cdn.openfin.co`. |
 
@@ -32,11 +32,10 @@ npm install
 ### Option A — Docker (both OSes)
 
 ```bash
-cd demos/01-interop-fdc3-blotter/deephaven
-docker compose up
+npm run deephaven                 # = cd shared/deephaven && docker compose up
 ```
 
-The compose file mounts `app.d/` into the container, enables *application
+The compose file (in `shared/deephaven/`) mounts `app.d/` into the container, enables *application
 mode* so `fdc3_blotter.py` runs at start-up, and sets anonymous
 authentication. First start pulls the image (about 1 GB).
 
@@ -45,14 +44,14 @@ authentication. First start pulls the image (about 1 GB).
 macOS / Linux:
 
 ```bash
-cd demos/01-interop-fdc3-blotter/deephaven
+cd shared/deephaven
 ./start.sh                 # creates .venv, installs deephaven-server, runs run_server.py
 ```
 
 Windows (PowerShell):
 
 ```powershell
-cd demos\01-interop-fdc3-blotter\deephaven
+cd shared\deephaven
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass   # only if scripts are blocked
 .\start.ps1
 ```
@@ -137,9 +136,9 @@ and the Deephaven bridge runs in a page of ours instead of a preload script.
 ## 7. Tests
 
 ```bash
+npm run typecheck                          # every workspace
+npm test                                   # unit tests (shared panels + demo 02 placement)
 cd demos/01-interop-fdc3-blotter
-npm run typecheck
-npm test                                   # unit tests (Vitest)
 npx playwright install chromium            # once
 npm run test:e2e                           # browser-mode e2e
 DEEPHAVEN_URL=http://localhost:10000 npm run test:e2e     # adds the live Deephaven round trip

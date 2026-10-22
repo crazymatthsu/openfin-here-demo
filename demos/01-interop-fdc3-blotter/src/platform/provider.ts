@@ -1,4 +1,5 @@
-import { createLog, setBadge } from '../shared/ui';
+import '@openfin-here-demo/trading-panels/styles.css';
+import { createLog, setBadge } from '@openfin-here-demo/trading-panels/shared/ui';
 
 /**
  * Platform provider.

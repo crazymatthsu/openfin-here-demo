@@ -1,0 +1,28 @@
+{
+  "name": "@openfin-here-demo/multi-window-multi-monitor",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Here Core (OpenFin) demo: the trading desk split into two platform windows placed on two screens, kept in sync through the platform's Interop Broker.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "launch": "openfin --launch --config http://localhost:5174/manifest.fin.json"
+  },
+  "dependencies": {
+    "@openfin-here-demo/trading-panels": "*"
+  },
+  "devDependencies": {
+    "@finos/fdc3": "^2.2.3",
+    "@openfin/core": "^45.102.4",
+    "@playwright/test": "^1.56.1",
+    "openfin-cli": "^4.0.0",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.3"
+  }
+}

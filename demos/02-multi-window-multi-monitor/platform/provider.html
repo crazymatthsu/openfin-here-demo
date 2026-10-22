@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Platform Provider</title>
+  </head>
+  <body>
+    <header class="panel-header"><h1>Platform provider · two-screen desk</h1><span class="badge" id="status">initialising…</span></header>
+    <main>
+      <p class="hint">
+        Hidden window that owns the platform. <code>fin.Platform.init()</code> creates the Interop Broker shared by
+        <em>both</em> windows, and the provider override below places each window on the screen named in its
+        <code>customData.screen</code> hint before it is created.
+      </p>
+      <div class="log" id="log"></div>
+    </main>
+    <script type="module" src="/src/platform/provider.ts"></script>
+  </body>
+</html>

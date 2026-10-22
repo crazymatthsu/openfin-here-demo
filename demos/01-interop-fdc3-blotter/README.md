@@ -16,8 +16,8 @@ Documentation lives in [`../../docs/01-interop-fdc3-blotter/`](../../docs/01-int
 ## Run
 
 ```bash
-# 1. Deephaven                         (see deephaven/README.md)
-cd deephaven && docker compose up      # or ./start.sh / .\start.ps1
+# 1. Deephaven                         (shared, see ../../shared/deephaven/README.md)
+npm run deephaven --prefix ../..       # or shared/deephaven/start.sh / start.ps1
 # 2. web app (from this folder)
 npm run dev                            # http://localhost:5173
 # 3. Here Core
@@ -31,14 +31,11 @@ Browser mode without Here Core: open <http://localhost:5173/> and follow the lin
 | Path | Purpose |
 |------|---------|
 | `public/manifest.fin.json` | Platform manifest: runtime, provider, view layout, preload script |
-| `public/preload/deephaven-bridge.js` | Preload script: Interop API → Deephaven input table |
 | `platform/`, `src/platform/` | Platform provider (`fin.Platform.init` + broker override) |
-| `blotter/`, `src/blotter/` | Order blotter (FDC3 publisher) |
-| `monitor/`, `src/monitor/` | Interop monitor (Interop API subscriber) |
-| `bridge/`, `src/bridge/` | Browser-mode host for the preload script |
-| `src/shared/` | FDC3 resolver + shim, context bus, instruments, UI helpers |
-| `deephaven/` | Deephaven script, app-mode descriptor, embedded-server runner, Docker Compose |
-| `tests/` | Vitest unit tests, Playwright e2e tests |
+| `blotter/`, `monitor/`, `bridge/` + `src/*.ts` | One-line entry pages mounting the shared panels |
+| `tests/e2e` | Playwright browser-mode tests + live Deephaven round trip |
+| [`../../shared/trading-panels`](../../shared/trading-panels/) | Blotter, monitor, bridge host, preload script, FDC3 shim, context bus (shared with demo 02) |
+| [`../../shared/deephaven`](../../shared/deephaven/) | Deephaven script, app-mode descriptor, embedded-server runner, Docker Compose (shared) |
 
 ## Scripts
 
@@ -48,5 +45,4 @@ Browser mode without Here Core: open <http://localhost:5173/> and follow the lin
 | `npm run build` / `npm run preview` | Production build / serve it |
 | `npm run launch` | Launch the platform in Here Core via `openfin-cli` |
 | `npm run typecheck` | `tsc --noEmit` |
-| `npm test` | Unit tests |
 | `npm run test:e2e` | Playwright browser-mode tests (`DEEPHAVEN_URL=http://localhost:10000` adds the live Deephaven test) |

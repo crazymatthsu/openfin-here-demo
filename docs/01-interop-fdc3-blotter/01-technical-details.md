@@ -14,14 +14,14 @@ tables and chart, which are filtered **server-side** by Deephaven.
 
 | Piece | Where | Role |
 |-------|-------|------|
-| Platform manifest | `public/manifest.fin.json` | Tells Here Core which runtime to use, which page is the provider, and the initial window layout (six views). |
-| Platform provider | `platform/provider.html`, `src/platform/provider.ts` | Hidden window. Calls `fin.Platform.init()`, which creates the **Interop Broker**. Subclasses the broker to log every context. |
-| Order blotter | `blotter/`, `src/blotter/` | Publisher. Uses the **FDC3 API** (`window.fdc3`) to join a user channel and `broadcast()` an `fdc3.instrument` context. Also listens so it follows other apps. |
-| Interop monitor | `monitor/`, `src/monitor/` | Subscriber. Uses the **Interop API** (`fin.me.interop`) to receive the same contexts and shows them in a log. Proves FDC3 and the Interop API share one broker. |
-| Deephaven bridge | `public/preload/deephaven-bridge.js` | **Preload script** injected by Here Core into one Deephaven view. Listens for `fdc3.instrument` with the Interop API and writes the symbol into a Deephaven **input table** with Deephaven's JS API. |
-| Deephaven script | `deephaven/app.d/fdc3_blotter.py` | Defines simulated quotes/trades/positions, the `symbol_filter` input table and the `where_in`-filtered tables and chart that the layout embeds. |
+| Platform manifest | `demos/01-interop-fdc3-blotter/public/manifest.fin.json` | Tells Here Core which runtime to use, which page is the provider, and the initial window layout (six views). |
+| Platform provider | `demos/01-interop-fdc3-blotter/platform/provider.html`, `src/platform/provider.ts` | Hidden window. Calls `fin.Platform.init()`, which creates the **Interop Broker**. Subclasses the broker to log every context. |
+| Order blotter | `shared/trading-panels/src/blotter/mount.ts` (entry page `blotter/index.html` in the demo) | Publisher. Uses the **FDC3 API** (`window.fdc3`) to join a user channel and `broadcast()` an `fdc3.instrument` context. Also listens so it follows other apps. |
+| Interop monitor | `shared/trading-panels/src/monitor/mount.ts` (entry page `monitor/index.html`) | Subscriber. Uses the **Interop API** (`fin.me.interop`) to receive the same contexts and shows them in a log. Proves FDC3 and the Interop API share one broker. |
+| Deephaven bridge | `shared/trading-panels/preload/deephaven-bridge.js`, served at `/preload/deephaven-bridge.js` by the `tradingPanelsPreload()` Vite plugin | **Preload script** injected by Here Core into one Deephaven view. Listens for `fdc3.instrument` with the Interop API and writes the symbol into a Deephaven **input table** with Deephaven's JS API. |
+| Deephaven script | `shared/deephaven/app.d/fdc3_blotter.py` | Defines simulated quotes/trades/positions, the `symbol_filter` input table and the `where_in`-filtered tables and chart that the layout embeds. |
 | Deephaven views | manifest only | Plain views pointing at Deephaven's embed URL `http://localhost:10000/iframe/widget/?name=<table>`. No code of ours runs in them (except the bridge in one). |
-| FDC3 shim | `src/shared/fdc3-shim.ts` | Browser-mode fallback so the pages work in plain Chrome for development and automated tests. Not used inside Here Core. |
+| FDC3 shim | `shared/trading-panels/src/shared/fdc3-shim.ts` | Browser-mode fallback so the pages work in plain Chrome for development and automated tests. Not used inside Here Core. |
 
 ## 2. Concepts
 
@@ -80,7 +80,7 @@ monitor (Interop API) interoperate without any adapter code.
 | Move *another* view into a group | — | `joinContextGroup('red', { uuid, name })` (platform-level control) |
 
 The provider can customise the broker with `interopOverride` (see
-`src/platform/provider.ts`). This demo only logs `setContext`; the same hook
+`demos/01-interop-fdc3-blotter/src/platform/provider.ts`). This demo only logs `setContext`; the same hook
 is where you would implement intent resolution (`handleFiredIntent`),
 connection authorisation (`isConnectionAuthorized`) or custom channel
 metadata (`getContextGroups`).
@@ -93,7 +93,7 @@ The blotter broadcasts the FDC3 standard instrument context:
 { "type": "fdc3.instrument", "name": "NVIDIA Corp.", "id": { "ticker": "NVDA", "BBG": "NVDA US Equity" } }
 ```
 
-Receivers (`src/shared/instruments.ts`, and the same logic duplicated in the
+Receivers (`shared/trading-panels/src/shared/instruments.ts`, and the same logic duplicated in the
 preload script) read `id.ticker`, falling back to the Bloomberg code and then
 a RIC, so contexts broadcast by other vendors' apps still resolve.
 
@@ -185,7 +185,7 @@ Deephaven table showing only the new symbol, completed in well under a second.
 
 ## 4. Code walk-through
 
-### `src/platform/provider.ts`
+### `demos/01-interop-fdc3-blotter/src/platform/provider.ts`
 
 ```ts
 await fin.Platform.init({
@@ -201,7 +201,7 @@ await fin.Platform.init({
 });
 ```
 
-### `src/blotter/main.ts` (publisher, FDC3)
+### `shared/trading-panels/src/blotter/mount.ts` (publisher, FDC3)
 
 ```ts
 const { fdc3 } = await getFdc3();                       // window.fdc3, or the shim in a plain browser
@@ -211,10 +211,10 @@ await fdc3.addContextListener('fdc3.instrument', ctx => applySymbol(symbolFromCo
 await fdc3.broadcast(instrumentContext('NVDA'));
 ```
 
-`src/shared/bus.ts` wraps this in a `ContextBus` so the channel picker and the
+`shared/trading-panels/src/shared/bus.ts` wraps this in a `ContextBus` so the channel picker and the
 log component can be shared with the monitor.
 
-### `src/monitor/main.ts` (subscriber, Interop API)
+### `shared/trading-panels/src/monitor/mount.ts` (subscriber, Interop API)
 
 ```ts
 const interop = fin.me.interop;                          // Interop Client, already connected to the broker
@@ -224,7 +224,7 @@ await interop.addContextHandler(ctx => log(ctx));        // no type filter: ever
 await interop.setContext(instrumentContext('AAPL'));
 ```
 
-### `public/preload/deephaven-bridge.js` (Deephaven side of the link)
+### `shared/trading-panels/preload/deephaven-bridge.js` (Deephaven side of the link)
 
 ```js
 // transport (inside Here Core)
@@ -247,7 +247,7 @@ await inputTable.addRow({ Slot: 'fdc3', Symbol: 'NVDA' });
 The script exposes `window.__dhFdc3Bridge` (`getState()`, `setSymbol()`,
 `setChannel()`, `onChange()`) for debugging from DevTools and for tests.
 
-### `deephaven/app.d/fdc3_blotter.py`
+### `shared/deephaven/app.d/fdc3_blotter.py`
 
 ```python
 symbol_filter = input_table(col_defs={"Slot": dht.string, "Symbol": dht.string}, key_cols="Slot")
@@ -288,6 +288,8 @@ price_chart = Figure().plot_xy(series_name="Last", t=quotes.where_in(symbol_filt
 | Nothing opens on launch | Dev server not on 5173, or manifest URL typo | `curl http://localhost:5173/manifest.fin.json` |
 
 ## 8. Where to go next
+
+- **Two screens:** demo 02 splits this desk into two platform windows placed on two monitors; the same broker keeps them in sync.
 
 - **Intents:** raise `ViewChart` from the blotter and resolve it in the broker override to focus the chart view.
 - **Multi-select:** broadcast `fdc3.instrumentList`; write several rows (one slot each) so Deephaven shows a basket.

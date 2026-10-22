@@ -1,0 +1,178 @@
+{
+  "$schema": "https://cdn.openfin.co/schemas/platform.json",
+  "licenseKey": "openfin-demo-license-key",
+  "devtools_port": 9091,
+  "runtime": {
+    "version": "stable"
+  },
+  "platform": {
+    "uuid": "openfin-here-demo.multi-window-multi-monitor",
+    "name": "Here Core demo: two-window, two-screen trading desk",
+    "providerUrl": "http://localhost:5174/platform/provider.html",
+    "autoShow": false,
+    "defaultWindowOptions": {
+      "contextMenu": true,
+      "saveWindowState": false
+    },
+    "defaultViewOptions": {
+      "fdc3InteropApi": "2.0",
+      "contextMenu": true,
+      "backgroundColor": "#121417"
+    }
+  },
+  "snapshot": {
+    "windows": [
+      {
+        "name": "trading-desk",
+        "customData": { "role": "trading-desk", "screen": "primary", "tileWhenSingle": "left" },
+        "defaultWidth": 1200,
+        "defaultHeight": 900,
+        "defaultLeft": 40,
+        "defaultTop": 40,
+        "saveWindowState": false,
+        "backgroundThrottling": true,
+        "layout": {
+          "content": [
+            {
+              "type": "row",
+              "content": [
+                {
+                  "type": "stack",
+                  "width": 58,
+                  "content": [
+                    {
+                      "type": "component",
+                      "componentName": "view",
+                      "title": "Order Blotter (FDC3 publisher)",
+                      "componentState": { "name": "order-blotter", "url": "http://localhost:5174/blotter/" }
+                    }
+                  ]
+                },
+                {
+                  "type": "column",
+                  "content": [
+                    {
+                      "type": "stack",
+                      "height": 55,
+                      "content": [
+                        {
+                          "type": "component",
+                          "componentName": "view",
+                          "title": "Desk Controller (screens, windows, channels)",
+                          "componentState": { "name": "desk-controller", "url": "http://localhost:5174/desk/" }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "stack",
+                      "content": [
+                        {
+                          "type": "component",
+                          "componentName": "view",
+                          "title": "Interop Monitor (Interop API)",
+                          "componentState": { "name": "interop-monitor", "url": "http://localhost:5174/monitor/" }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "market-data",
+        "customData": { "role": "market-data", "screen": "secondary", "tileWhenSingle": "right" },
+        "defaultWidth": 1200,
+        "defaultHeight": 900,
+        "defaultLeft": 1280,
+        "defaultTop": 40,
+        "saveWindowState": false,
+        "backgroundThrottling": true,
+        "layout": {
+          "content": [
+            {
+              "type": "column",
+              "content": [
+                {
+                  "type": "row",
+                  "height": 55,
+                  "content": [
+                    {
+                      "type": "stack",
+                      "content": [
+                        {
+                          "type": "component",
+                          "componentName": "view",
+                          "title": "Deephaven · Quotes (filtered)",
+                          "componentState": { "name": "dh-quotes", "url": "http://localhost:10000/iframe/widget/?name=quotes_filtered" }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "stack",
+                      "content": [
+                        {
+                          "type": "component",
+                          "componentName": "view",
+                          "title": "Deephaven · Price chart (filtered)",
+                          "componentState": { "name": "dh-chart", "url": "http://localhost:10000/iframe/widget/?name=price_chart" }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "row",
+                  "content": [
+                    {
+                      "type": "stack",
+                      "content": [
+                        {
+                          "type": "component",
+                          "componentName": "view",
+                          "title": "Deephaven · Trades (filtered)",
+                          "componentState": { "name": "dh-trades", "url": "http://localhost:10000/iframe/widget/?name=trades_filtered" }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "stack",
+                      "content": [
+                        {
+                          "type": "component",
+                          "componentName": "view",
+                          "title": "Deephaven · Positions (filtered)",
+                          "componentState": { "name": "dh-positions", "url": "http://localhost:10000/iframe/widget/?name=positions_filtered" }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "stack",
+                      "width": 22,
+                      "content": [
+                        {
+                          "type": "component",
+                          "componentName": "view",
+                          "title": "Deephaven · symbol_filter (bridge host)",
+                          "componentState": {
+                            "name": "dh-filter-state",
+                            "url": "http://localhost:10000/iframe/widget/?name=symbol_filter",
+                            "preloadScripts": [
+                              { "url": "http://localhost:5174/preload/deephaven-bridge.js", "mandatory": false }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

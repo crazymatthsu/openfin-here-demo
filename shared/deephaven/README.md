@@ -1,6 +1,6 @@
-# Deephaven side of demo 01
+# Deephaven side (shared by all demos)
 
-Everything the Deephaven server needs. The script defines simulated market
+Everything the Deephaven server needs; demo 01 and demo 02 both embed these tables. The script defines simulated market
 data, the `symbol_filter` input table that the OpenFin bridge writes to, and
 the `where_in`-filtered tables and chart that the platform embeds.
 
